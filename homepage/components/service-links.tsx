@@ -7,7 +7,7 @@ export default function ServiceLinks() {
         <div className="bg-accent rounded-2xl shadow-2xl p-4 opacity-0 animate-scale-in backdrop-blur-sm">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <a
-              href="/painel/faturas"
+              href="/painel/minhas-faturas"
               className="flex items-center gap-4 bg-white/10 hover:bg-white/20 text-white p-6 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg group"
             >
               <FileText size={40} className="transition-transform duration-300 group-hover:rotate-12" />

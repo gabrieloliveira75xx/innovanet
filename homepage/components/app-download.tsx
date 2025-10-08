@@ -14,7 +14,7 @@ export default function AppDownload() {
               </p>
 
               <Link
-                href="/login"
+                href="/painel"
                 className="inline-flex items-center gap-3 bg-accent text-white px-8 py-4 rounded-xl font-semibold hover:opacity-90 transition-all duration-300 hover:scale-105 hover:shadow-lg group"
               >
                 <LogIn size={24} className="transition-transform duration-300 group-hover:scale-110" />

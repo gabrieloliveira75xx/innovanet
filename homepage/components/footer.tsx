@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="bg-accent rounded-2xl p-6 -mt-32 mb-16 shadow-2xl">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <a
-              href="/painel/faturas"
+              href="/painel/minhas-faturas"
               className="flex items-center gap-4 bg-white/10 hover:bg-primary p-5 rounded-xl transition-all hover:shadow-lg"
             >
               <FileText size={36} className="flex-shrink-0" />
@@ -24,7 +24,7 @@ export default function Footer() {
             </a>
 
             <a
-              href="/painel/meu-plano/suporte"
+              href="/painel/suporte"
               className="flex items-center gap-4 bg-white/10 hover:bg-primary p-5 rounded-xl transition-all hover:shadow-lg"
             >
               <Settings size={36} className="flex-shrink-0" />
