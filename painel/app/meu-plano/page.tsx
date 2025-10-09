@@ -77,7 +77,7 @@ export default function MeuPlanoPage() {
 
         {/* Action Buttons */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          <Link href="/mudar-plano" className="block">
+          <Link href="/painel/mudar-plano" className="block">
             <Button
               size="lg"
               className="w-full h-auto py-6 text-lg md:text-xl font-semibold bg-primary hover:opacity-90 transition-all"
