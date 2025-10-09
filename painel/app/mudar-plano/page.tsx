@@ -58,7 +58,7 @@ export default function MudarPlanoPage() {
       <header className="bg-white border-b border-gray-200 py-6 px-4 shadow-sm">
         <div className="max-w-6xl mx-auto">
           <Link
-            href="/painel/meu-plano"
+            href="../"
             className="inline-flex items-center gap-2 mb-4 text-gray-600 hover:text-primary transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />

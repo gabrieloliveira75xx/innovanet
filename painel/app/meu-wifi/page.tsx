@@ -128,7 +128,7 @@ export default function MinhaWiFiPage() {
         </div>
 
         <div className="text-center">
-          <Link href="/">
+          <Link href="/painel">
             <Button size="lg" variant="ghost" className="text-base gap-2 text-gray-600 hover:text-primary">
               <ArrowLeft className="w-5 h-5" />
               Voltar para o Início
