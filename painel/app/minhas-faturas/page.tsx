@@ -39,7 +39,7 @@ export default function MinhasFaturasPage() {
       <header className="bg-white border-b border-gray-200 py-6 px-4 shadow-sm">
         <div className="max-w-4xl mx-auto">
           <Link
-            href="/dashboard"
+            href="/"
             className="inline-flex items-center gap-2 mb-4 text-gray-600 hover:text-primary transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -149,7 +149,7 @@ export default function MinhasFaturasPage() {
         </div>
 
         <div className="text-center">
-          <Link href="/dashboard">
+          <Link href="/">
             <Button size="lg" variant="ghost" className="text-base gap-2 text-gray-600 hover:text-primary">
               <ArrowLeft className="w-5 h-5" />
               Voltar para o Início

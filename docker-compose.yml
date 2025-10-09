@@ -6,11 +6,11 @@ services:
       - NODE_ENV=production
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.homepage.rule=Host(`maximiza.shop`) || Host(`www.maximiza.shop`)"
-      - "traefik.http.routers.homepage.entrypoints=web"
-      - "traefik.http.routers.homepage.priority=1"
-      - "traefik.http.services.homepage.loadbalancer.server.port=3000"
-      - "traefik.http.services.homepage.loadbalancer.passHostHeader=true"
+      - "traefik.http.routers.max-homepage.rule=(Host(`maximiza.shop`) || Host(`www.maximiza.shop`)) && !PathPrefix(`/painel`)"
+      - "traefik.http.routers.max-homepage.entrypoints=web,websecure"
+      - "traefik.http.routers.max-homepage.priority=1"
+      - "traefik.http.services.max-homepage.loadbalancer.server.port=3000"
+      - "traefik.http.services.max-homepage.loadbalancer.passHostHeader=true"
     restart: unless-stopped
     networks:
       - traefik-net
@@ -22,13 +22,16 @@ services:
       - NODE_ENV=production
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.painel.rule=(Host(`maximiza.shop`) || Host(`www.maximiza.shop`)) && PathPrefix(`/painel`)"
-      - "traefik.http.routers.painel.entrypoints=web"
-      - "traefik.http.services.painel.loadbalancer.server.port=3000"
-      - "traefik.http.middlewares.painel-stripprefix.stripprefix.prefixes=/painel"
-      - "traefik.http.middlewares.painel-stripprefix.stripprefix.forceSlash=true"
-      - "traefik.http.routers.painel.middlewares=painel-stripprefix"
-      - "traefik.http.services.painel.loadbalancer.passHostHeader=true"
+      - "traefik.http.routers.max-painel.rule=(Host(`maximiza.shop`) || Host(`www.maximiza.shop`)) && PathPrefix(`/painel`)"
+      - "traefik.http.routers.max-painel.entrypoints=web,websecure"
+      - "traefik.http.routers.max-painel.priority=1000"
+      - "traefik.http.services.max-painel.loadbalancer.server.port=3000"
+      - "traefik.http.middlewares.max-painel-stripprefix.stripprefix.prefixes=/painel"
+      - "traefik.http.middlewares.max-painel-stripprefix.stripprefix.forceSlash=true"
+      - "traefik.http.middlewares.max-painel-httpsheaders.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.max-painel-identifier.headers.customresponseheaders.X-App=painel"
+      - "traefik.http.routers.max-painel.middlewares=max-painel-stripprefix,max-painel-httpsheaders,max-painel-identifier"
+      - "traefik.http.services.max-painel.loadbalancer.passHostHeader=true"
     restart: unless-stopped
     networks:
       - traefik-net
