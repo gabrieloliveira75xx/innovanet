@@ -12,7 +12,7 @@ export default function HomePage() {
             <h1 className="text-3xl md:text-4xl font-bold text-primary">Innovanet</h1>
             <p className="text-gray-600 mt-1">Central do Assinante</p>
           </div>
-          <Link href="/login" className="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors">
+          <Link href="/painel/login" className="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors">
             <LogOut size={20} />
             <span className="hidden sm:inline">Sair</span>
           </Link>
@@ -55,7 +55,7 @@ export default function HomePage() {
           </Link>
 
           {/* Minhas Faturas Card */}
-          <Link href="/painel/minhas-fatura" className="block group">
+          <Link href="/painel/minhas-faturas" className="block group">
             <Card className="h-full border-2 border-gray-200 hover:border-primary hover:shadow-xl transition-all duration-300">
               <CardContent className="flex flex-col items-center justify-center p-10 text-center h-full">
                 <div className="bg-primary/10 rounded-full p-8 mb-6 group-hover:bg-primary group-hover:scale-110 transition-all duration-300">

@@ -55,7 +55,7 @@ export default function DashboardHome() {
           </Link>
 
           {/* Minhas Faturas Card */}
-          <Link href="/painel/minhas-fatura" className="block group">
+          <Link href="/painel/minhas-faturas" className="block group">
             <Card className="h-full border-2 border-gray-200 hover:border-primary hover:shadow-xl transition-all duration-300">
               <CardContent className="flex flex-col items-center justify-center p-10 text-center h-full">
                 <div className="bg-primary/10 rounded-full p-8 mb-6 group-hover:bg-primary group-hover:scale-110 transition-all duration-300">

@@ -20,7 +20,7 @@ export function CategoryNav() {
     },
     {
       name: "Minhas Faturas",
-      href: "/painel/minhas-fatura",
+      href: "/painel/minhas-faturas",
       icon: CreditCard,
     },
   ]
