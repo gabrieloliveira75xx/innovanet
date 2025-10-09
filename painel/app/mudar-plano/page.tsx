@@ -58,7 +58,7 @@ export default function MudarPlanoPage() {
       <header className="bg-white border-b border-gray-200 py-6 px-4 shadow-sm">
         <div className="max-w-6xl mx-auto">
           <Link
-            href="/meu-plano"
+            href="meu-plano/"
             className="inline-flex items-center gap-2 mb-4 text-gray-600 hover:text-primary transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -156,7 +156,7 @@ export default function MudarPlanoPage() {
           >
             Confirmar Mudança de Plano
           </Button>
-          <Link href="/meu-plano">
+          <Link href="meu-plano/">
             <Button
               size="lg"
               variant="outline"
@@ -169,7 +169,7 @@ export default function MudarPlanoPage() {
 
         {/* Back Button */}
         <div className="text-center mt-8">
-          <Link href="/meu-plano">
+          <Link href="meu-plano/">
             <Button size="lg" variant="ghost" className="text-base gap-2 text-gray-600 hover:text-primary">
               <ArrowLeft className="w-5 h-5" />
               Voltar para Meu Plano

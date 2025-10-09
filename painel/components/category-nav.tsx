@@ -10,17 +10,17 @@ export function CategoryNav() {
   const categories = [
     {
       name: "Meu Plano",
-      href: "/meu-plano",
+      href: "meu-plano/",
       icon: Zap,
     },
     {
       name: "Minha Rede WiFi",
-      href: "/minha-wifi",
+      href: "meu-wifi/",
       icon: Wifi,
     },
     {
       name: "Minhas Faturas",
-      href: "/minhas-faturas",
+      href: "minhas-faturas/",
       icon: CreditCard,
     },
   ]
