@@ -4,6 +4,7 @@ import { Rubik } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import "./globals.css"
+import "./payment-bricks.css"
 
 const rubik = Rubik({
   subsets: ["latin"],

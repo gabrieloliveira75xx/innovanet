@@ -1,0 +1,48 @@
+/* Estilos específicos para melhorar a altura do Payment Brick */
+.mercadopago-bricks-container {
+  min-height: 500px !important;
+  height: auto !important;
+}
+
+@media (min-width: 640px) {
+  .mercadopago-bricks-container {
+    min-height: 600px !important;
+  }
+}
+
+/* Garantir que o modal tenha altura adequada em dispositivos móveis */
+@media (max-height: 600px) {
+  .payment-modal-container {
+    max-height: 95vh !important;
+  }
+  
+  .mercadopago-bricks-container {
+    min-height: 400px !important;
+    max-height: 50vh !important;
+  }
+}
+
+/* Melhorar scroll interno do modal */
+.payment-modal-content {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e0 #f7fafc;
+}
+
+.payment-modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.payment-modal-content::-webkit-scrollbar-track {
+  background: #f7fafc;
+  border-radius: 3px;
+}
+
+.payment-modal-content::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 3px;
+}
+
+.payment-modal-content::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}

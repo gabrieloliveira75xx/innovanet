@@ -1,13 +1,17 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowLeft, Check, AlertCircle } from "lucide-react"
+import { ArrowLeft, Check, AlertCircle, CreditCard } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
+import { UniversalPayment } from "@/components/universal-payment"
+import { CategoryNav } from "@/components/category-nav"
 
 export default function MudarPlanoPage() {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false)
+  const [paymentItems, setPaymentItems] = useState<any[]>([])
 
   const currentPlanId = "turbo"
 
@@ -48,17 +52,35 @@ export default function MudarPlanoPage() {
 
   const handleConfirm = () => {
     if (selectedPlan) {
-      alert("Solicitação enviada! Nossa equipe entrará em contato em breve para confirmar a mudança de plano.")
+      const plan = plans.find(p => p.id === selectedPlan)
+      if (plan) {
+        setPaymentItems([{
+          id: plan.id,
+          title: `Mudança para Plano ${plan.name}`,
+          description: `${plan.speed} - ${plan.description}`,
+          amount: parseFloat(plan.price.replace(',', '.')),
+          quantity: 1
+        }])
+        setIsPaymentOpen(true)
+      }
     }
+  }
+
+  const handlePaymentSuccess = (paymentData?: any) => {
+    console.log('Pagamento realizado com sucesso:', paymentData)
+    // Aqui você pode implementar a lógica para atualizar o plano do usuário
+    alert('Plano alterado com sucesso!')
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <CategoryNav />
+      
       {/* Header */}
       <header className="bg-white border-b border-gray-200 py-6 px-4 shadow-sm">
         <div className="max-w-6xl mx-auto">
           <Link
-            href="../"
+            href="/painel"
             className="inline-flex items-center gap-2 mb-4 text-gray-600 hover:text-primary transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -177,6 +199,16 @@ export default function MudarPlanoPage() {
           </Link>
         </div>
       </main>
+
+      {/* Modal de Pagamento */}
+      <UniversalPayment
+        items={paymentItems}
+        isOpen={isPaymentOpen}
+        onClose={() => setIsPaymentOpen(false)}
+        onPaymentSuccess={handlePaymentSuccess}
+        title="Mudança de Plano"
+        description="Confirme o pagamento para alterar seu plano de internet"
+      />
     </div>
   )
 }

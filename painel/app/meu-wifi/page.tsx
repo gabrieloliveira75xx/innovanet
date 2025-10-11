@@ -2,22 +2,41 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, Wifi, Eye, EyeOff, Copy, Check } from "lucide-react"
+import { ArrowLeft, Wifi, Eye, EyeOff, Copy, Check, CreditCard } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { CategoryNav } from "@/components/category-nav"
+import { UniversalPayment } from "@/components/universal-payment"
 
 export default function MinhaWiFiPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false)
+  const [paymentItems, setPaymentItems] = useState<any[]>([])
   const wifiPassword = "MinhaS3nh@F0rt3"
 
   const handleCopyPassword = () => {
     navigator.clipboard.writeText(wifiPassword)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  const handleUpgradeWifi = () => {
+    setPaymentItems([{
+      id: 'wifi-upgrade',
+      title: 'Upgrade para Wi-Fi 6',
+      description: 'Melhoria da rede Wi-Fi para tecnologia mais avançada',
+      amount: 25.00,
+      quantity: 1
+    }])
+    setIsPaymentOpen(true)
+  }
+
+  const handlePaymentSuccess = (paymentData?: any) => {
+    console.log('Upgrade Wi-Fi realizado com sucesso:', paymentData)
+    alert('Upgrade Wi-Fi realizado com sucesso!')
   }
 
   return (
@@ -27,7 +46,7 @@ export default function MinhaWiFiPage() {
       <header className="bg-white border-b border-gray-200 py-6 px-4 shadow-sm">
         <div className="max-w-4xl mx-auto">
           <Link
-            href="/"
+            href="/painel"
             className="inline-flex items-center gap-2 mb-4 text-gray-600 hover:text-primary transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -111,7 +130,7 @@ export default function MinhaWiFiPage() {
           </CardContent>
         </Card>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <Button
             size="lg"
             className="h-auto py-6 text-lg md:text-xl font-semibold bg-primary hover:opacity-90 transition-all"
@@ -121,7 +140,16 @@ export default function MinhaWiFiPage() {
           <Button
             size="lg"
             variant="outline"
-            className="h-auto py-6 text-lg md:text-xl font-semibold border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all bg-transparent"
+            onClick={handleUpgradeWifi}
+            className="h-auto py-6 text-lg md:text-xl font-semibold border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all bg-transparent gap-2"
+          >
+            <CreditCard className="w-5 h-5" />
+            Upgrade Wi-Fi
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            className="h-auto py-6 text-lg md:text-xl font-semibold border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-all bg-transparent"
           >
             Ajuda com WiFi
           </Button>
@@ -136,6 +164,16 @@ export default function MinhaWiFiPage() {
           </Link>
         </div>
       </main>
+
+      {/* Modal de Pagamento */}
+      <UniversalPayment
+        items={paymentItems}
+        isOpen={isPaymentOpen}
+        onClose={() => setIsPaymentOpen(false)}
+        onPaymentSuccess={handlePaymentSuccess}
+        title="Upgrade Wi-Fi"
+        description="Confirme o pagamento para fazer upgrade da sua rede Wi-Fi"
+      />
     </div>
   )
 }

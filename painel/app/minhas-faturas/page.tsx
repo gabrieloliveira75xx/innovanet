@@ -1,13 +1,16 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { ArrowLeft, FileText, Download, CreditCard, CheckCircle, AlertCircle } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { CategoryNav } from "@/components/category-nav"
+import { MercadoPagoCheckout } from "@/components/mercado-pago-checkout"
+import { useSearchParams } from "next/navigation"
 
-const faturas = [
+const faturasIniciais = [
   {
     id: 1,
     mes: "Maio 2025",
@@ -32,6 +35,49 @@ const faturas = [
 ]
 
 export default function MinhasFaturasPage() {
+  const [faturas, setFaturas] = useState(faturasIniciais)
+  const [selectedFatura, setSelectedFatura] = useState<typeof faturasIniciais[0] | null>(null)
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
+  const searchParams = useSearchParams()
+
+  // Verificar se há parâmetros de retorno do Mercado Pago
+  useEffect(() => {
+    const status = searchParams.get('status')
+    if (status === 'success') {
+      // Pagamento aprovado - você pode mostrar uma mensagem de sucesso
+      console.log('Pagamento aprovado!')
+    } else if (status === 'failure') {
+      // Pagamento rejeitado
+      console.log('Pagamento rejeitado')
+    } else if (status === 'pending') {
+      // Pagamento pendente
+      console.log('Pagamento pendente')
+    }
+  }, [searchParams])
+
+  const handlePaymentClick = (fatura: typeof faturasIniciais[0]) => {
+    setSelectedFatura(fatura)
+    setIsCheckoutOpen(true)
+  }
+
+  const handlePaymentSuccess = () => {
+    // Atualizar status da fatura para "paga"
+    if (selectedFatura) {
+      setFaturas(prevFaturas => 
+        prevFaturas.map(f => 
+          f.id === selectedFatura.id ? { ...f, status: "paga" } : f
+        )
+      )
+    }
+    setIsCheckoutOpen(false)
+    setSelectedFatura(null)
+  }
+
+  const handleCloseCheckout = () => {
+    setIsCheckoutOpen(false)
+    setSelectedFatura(null)
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <CategoryNav />
@@ -39,14 +85,14 @@ export default function MinhasFaturasPage() {
       <header className="bg-white border-b border-gray-200 py-6 px-4 shadow-sm">
         <div className="max-w-4xl mx-auto">
           <Link
-            href="../"
+            href="/painel"
             className="inline-flex items-center gap-2 mb-4 text-gray-600 hover:text-primary transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             <span className="text-base font-medium">Voltar</span>
           </Link>
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Minhas Faturas</h1>
-          <p className="mt-2 text-gray-600">Consulte e pague suas contas</p>
+          <p className="mt-2 text-gray-600 text-lg">Consulte e pague suas contas de forma simples e segura</p>
         </div>
       </header>
 
@@ -63,22 +109,22 @@ export default function MinhasFaturasPage() {
                     </div>
                     <div className="flex-1">
                       <h3 className="text-xl md:text-2xl font-bold mb-2 text-gray-900">{fatura.mes}</h3>
-                      <p className="text-gray-700 text-base">
-                        Vencimento: <strong>{fatura.vencimento}</strong>
+                      <p className="text-gray-700 text-lg">
+                        Vencimento: <strong className="text-gray-900">{fatura.vencimento}</strong>
                       </p>
-                      <p className="text-2xl font-bold text-primary mt-2">{fatura.valor}</p>
+                      <p className="text-3xl font-bold text-primary mt-3">{fatura.valor}</p>
                     </div>
                   </div>
 
                   <div className="flex flex-col gap-3 md:items-end">
                     {fatura.status === "paga" ? (
-                      <Badge className="bg-green-500 text-white text-base px-4 py-2 gap-2 w-fit">
-                        <CheckCircle className="w-5 h-5" />
+                      <Badge className="bg-green-500 text-white text-lg px-5 py-3 gap-2 w-fit">
+                        <CheckCircle className="w-6 h-6" />
                         Paga
                       </Badge>
                     ) : (
-                      <Badge className="bg-accent text-white text-base px-4 py-2 gap-2 w-fit">
-                        <AlertCircle className="w-5 h-5" />
+                      <Badge className="bg-orange-500 text-white text-lg px-5 py-3 gap-2 w-fit">
+                        <AlertCircle className="w-6 h-6" />
                         Pendente
                       </Badge>
                     )}
@@ -87,15 +133,19 @@ export default function MinhasFaturasPage() {
                       <Button
                         size="lg"
                         variant="outline"
-                        className="gap-2 border-2 border-gray-300 hover:bg-gray-100 bg-transparent"
+                        className="gap-2 border-2 border-gray-300 hover:bg-gray-100 bg-transparent text-lg py-6"
                       >
-                        <Download className="w-5 h-5" />
+                        <Download className="w-6 h-6" />
                         Baixar
                       </Button>
                       {fatura.status === "pendente" && (
-                        <Button size="lg" className="gap-2 bg-primary hover:opacity-90">
-                          <CreditCard className="w-5 h-5" />
-                          Pagar
+                        <Button 
+                          size="lg" 
+                          className="gap-2 bg-primary hover:opacity-90 text-lg py-6"
+                          onClick={() => handlePaymentClick(fatura)}
+                        >
+                          <CreditCard className="w-6 h-6" />
+                          Pagar Agora
                         </Button>
                       )}
                     </div>
@@ -157,6 +207,16 @@ export default function MinhasFaturasPage() {
           </Link>
         </div>
       </main>
+
+      {/* Modal de Checkout */}
+      {selectedFatura && (
+        <MercadoPagoCheckout
+          fatura={selectedFatura}
+          isOpen={isCheckoutOpen}
+          onClose={handleCloseCheckout}
+          onPaymentSuccess={handlePaymentSuccess}
+        />
+      )}
     </div>
   )
 }

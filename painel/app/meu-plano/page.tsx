@@ -1,12 +1,33 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowLeft, Zap, Calendar, DollarSign } from "lucide-react"
+import { ArrowLeft, Zap, Calendar, DollarSign, CreditCard } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { CategoryNav } from "@/components/category-nav"
+import { useState } from "react"
+import { UniversalPayment } from "@/components/universal-payment"
 
 export default function MeuPlanoPage() {
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false)
+  const [paymentItems, setPaymentItems] = useState<any[]>([])
+
+  const handleUpgradePlan = () => {
+    setPaymentItems([{
+      id: 'upgrade',
+      title: 'Upgrade do Plano Turbo',
+      description: 'Melhoria para Plano Ultra - 500 Megas',
+      amount: 40.00, // Diferença de preço
+      quantity: 1
+    }])
+    setIsPaymentOpen(true)
+  }
+
+  const handlePaymentSuccess = (paymentData?: any) => {
+    console.log('Upgrade realizado com sucesso:', paymentData)
+    alert('Plano atualizado com sucesso!')
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* CategoryNav moved to the top, before header */}
@@ -16,7 +37,7 @@ export default function MeuPlanoPage() {
       <header className="bg-white border-b border-gray-200 py-6 px-4 shadow-sm">
         <div className="max-w-4xl mx-auto">
           <Link
-            href="../"
+            href="/painel"
             className="inline-flex items-center gap-2 mb-4 text-gray-600 hover:text-primary transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -88,9 +109,11 @@ export default function MeuPlanoPage() {
           <Button
             size="lg"
             variant="outline"
-            className="h-auto py-6 text-lg md:text-xl font-semibold border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all bg-transparent"
+            onClick={handleUpgradePlan}
+            className="h-auto py-6 text-lg md:text-xl font-semibold border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all bg-transparent gap-2"
           >
-            Falar com Suporte
+            <CreditCard className="w-5 h-5" />
+            Upgrade Rápido
           </Button>
         </div>
 
@@ -104,6 +127,16 @@ export default function MeuPlanoPage() {
           </Link>
         </div>
       </main>
+
+      {/* Modal de Pagamento */}
+      <UniversalPayment
+        items={paymentItems}
+        isOpen={isPaymentOpen}
+        onClose={() => setIsPaymentOpen(false)}
+        onPaymentSuccess={handlePaymentSuccess}
+        title="Upgrade de Plano"
+        description="Confirme o pagamento para fazer upgrade do seu plano"
+      />
     </div>
   )
 }
