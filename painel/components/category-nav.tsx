@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { CreditCard, Wifi, Zap } from "lucide-react"
+import { CreditCard, Wifi, Zap, HelpCircle } from "lucide-react"
 
 export function CategoryNav() {
   const pathname = usePathname()
@@ -22,6 +22,11 @@ export function CategoryNav() {
       name: "Minhas Faturas",
       href: "/painel/minhas-faturas",
       icon: CreditCard,
+    },
+    {
+      name: "Suporte",
+      href: "/painel/suporte",
+      icon: HelpCircle,
     },
   ]
 

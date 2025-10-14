@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { ArrowLeft, FileText, Download, CreditCard, CheckCircle, AlertCircle } from "lucide-react"
+import { ArrowLeft, FileText, CreditCard, CheckCircle, AlertCircle, XCircle } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { CategoryNav } from "@/components/category-nav"
 import { MercadoPagoCheckout } from "@/components/mercado-pago-checkout"
 import { useSearchParams } from "next/navigation"
+import { useToast } from "@/hooks/use-toast"
 
 const faturasIniciais = [
   {
@@ -34,40 +35,77 @@ const faturasIniciais = [
   },
 ]
 
+function isOverdue(vencimento: string): boolean {
+  const [day, month, year] = vencimento.split("/").map(Number)
+  const dueDate = new Date(year, month - 1, day)
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  return dueDate < today
+}
+
+function getStatusInfo(fatura: (typeof faturasIniciais)[0]) {
+  if (fatura.status === "paga") {
+    return {
+      color: "bg-green-50 border-green-300",
+      badge: { bg: "bg-green-500", icon: CheckCircle, text: "Paga" },
+      description: "Esta fatura já foi paga",
+    }
+  }
+
+  if (isOverdue(fatura.vencimento)) {
+    return {
+      color: "bg-red-50 border-red-300",
+      badge: { bg: "bg-red-500", icon: XCircle, text: "Vencida" },
+      description: "Esta fatura está vencida",
+    }
+  }
+
+  return {
+    color: "bg-orange-50 border-orange-300",
+    badge: { bg: "bg-orange-500", icon: AlertCircle, text: "Pendente" },
+    description: "Aguardando pagamento",
+  }
+}
+
 export default function MinhasFaturasPage() {
   const [faturas, setFaturas] = useState(faturasIniciais)
-  const [selectedFatura, setSelectedFatura] = useState<typeof faturasIniciais[0] | null>(null)
+  const [selectedFatura, setSelectedFatura] = useState<(typeof faturasIniciais)[0] | null>(null)
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
   const searchParams = useSearchParams()
+  const { toast } = useToast()
 
-  // Verificar se há parâmetros de retorno do Mercado Pago
   useEffect(() => {
-    const status = searchParams.get('status')
-    if (status === 'success') {
-      // Pagamento aprovado - você pode mostrar uma mensagem de sucesso
-      console.log('Pagamento aprovado!')
-    } else if (status === 'failure') {
-      // Pagamento rejeitado
-      console.log('Pagamento rejeitado')
-    } else if (status === 'pending') {
-      // Pagamento pendente
-      console.log('Pagamento pendente')
+    const status = searchParams.get("status")
+    if (status === "success") {
+      console.log("Pagamento aprovado!")
+    } else if (status === "failure") {
+      console.log("Pagamento rejeitado")
+    } else if (status === "pending") {
+      console.log("Pagamento pendente")
     }
   }, [searchParams])
 
-  const handlePaymentClick = (fatura: typeof faturasIniciais[0]) => {
+  const handleCardClick = (fatura: (typeof faturasIniciais)[0]) => {
+    if (fatura.status === "paga") {
+      toast({
+        title: "Fatura já paga",
+        description: `A fatura de ${fatura.mes} já foi paga.`,
+        duration: 3000,
+      })
+    } else {
+      setSelectedFatura(fatura)
+      setIsCheckoutOpen(true)
+    }
+  }
+
+  const handlePaymentClick = (fatura: (typeof faturasIniciais)[0]) => {
     setSelectedFatura(fatura)
     setIsCheckoutOpen(true)
   }
 
   const handlePaymentSuccess = () => {
-    // Atualizar status da fatura para "paga"
     if (selectedFatura) {
-      setFaturas(prevFaturas => 
-        prevFaturas.map(f => 
-          f.id === selectedFatura.id ? { ...f, status: "paga" } : f
-        )
-      )
+      setFaturas((prevFaturas) => prevFaturas.map((f) => (f.id === selectedFatura.id ? { ...f, status: "paga" } : f)))
     }
     setIsCheckoutOpen(false)
     setSelectedFatura(null)
@@ -96,64 +134,60 @@ export default function MinhasFaturasPage() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-8 md:py-12">
         <div className="space-y-4">
-          {faturas.map((fatura) => (
-            <Card key={fatura.id} className="shadow-lg border-2 border-gray-200">
-              <CardContent className="p-6 md:p-8">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                  <div className="flex items-start gap-4 flex-1">
-                    <div className="bg-primary/10 rounded-full p-3 flex-shrink-0">
-                      <FileText className="w-8 h-8 text-primary" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-xl md:text-2xl font-bold mb-2 text-gray-900">{fatura.mes}</h3>
-                      <p className="text-gray-700 text-lg">
-                        Vencimento: <strong className="text-gray-900">{fatura.vencimento}</strong>
-                      </p>
-                      <p className="text-3xl font-bold text-primary mt-3">{fatura.valor}</p>
-                    </div>
-                  </div>
+          {faturas.map((fatura) => {
+            const statusInfo = getStatusInfo(fatura)
+            const StatusIcon = statusInfo.badge.icon
 
-                  <div className="flex flex-col gap-3 md:items-end">
-                    {fatura.status === "paga" ? (
-                      <Badge className="bg-green-500 text-white text-lg px-5 py-3 gap-2 w-fit">
-                        <CheckCircle className="w-6 h-6" />
-                        Paga
-                      </Badge>
-                    ) : (
-                      <Badge className="bg-orange-500 text-white text-lg px-5 py-3 gap-2 w-fit">
-                        <AlertCircle className="w-6 h-6" />
-                        Pendente
-                      </Badge>
-                    )}
+            return (
+              <Card
+                key={fatura.id}
+                className={`shadow-lg border-2 ${statusInfo.color} transition-all hover:shadow-xl cursor-pointer`}
+                onClick={() => handleCardClick(fatura)}
+              >
+                <CardContent className="p-6 md:p-8">
+                  <div className="flex flex-col gap-6">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-start gap-4 flex-1">
+                        <div className="bg-primary/10 rounded-full p-3 flex-shrink-0">
+                          <FileText className="w-8 h-8 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-xl md:text-2xl font-bold mb-2 text-gray-900">{fatura.mes}</h3>
+                          <p className="text-gray-700 text-lg">
+                            Vencimento: <strong className="text-gray-900">{fatura.vencimento}</strong>
+                          </p>
+                          <p className="text-3xl font-bold text-primary mt-3">{fatura.valor}</p>
+                        </div>
+                      </div>
 
-                    <div className="flex gap-2">
-                      <Button
-                        size="lg"
-                        variant="outline"
-                        className="gap-2 border-2 border-gray-300 hover:bg-gray-100 bg-transparent text-lg py-6"
-                      >
-                        <Download className="w-6 h-6" />
-                        Baixar
-                      </Button>
-                      {fatura.status === "pendente" && (
-                        <Button 
-                          size="lg" 
-                          className="gap-2 bg-primary hover:opacity-90 text-lg py-6"
-                          onClick={() => handlePaymentClick(fatura)}
+                      <Badge className={`${statusInfo.badge.bg} text-white text-lg px-5 py-3 gap-2 w-fit`}>
+                        <StatusIcon className="w-6 h-6" />
+                        {statusInfo.badge.text}
+                      </Badge>
+                    </div>
+
+                    <div className="text-center">
+                      <p className="text-base font-medium text-gray-700">{statusInfo.description}</p>
+                    </div>
+
+                    {fatura.status === "pendente" && (
+                      <div className="flex justify-center pt-2">
+                        <Button
+                          size="lg"
+                          className="gap-3 bg-primary hover:opacity-90 text-xl py-7 px-12 w-full md:w-auto min-w-[280px] shadow-md pointer-events-none"
                         >
-                          <CreditCard className="w-6 h-6" />
+                          <CreditCard className="w-7 h-7" />
                           Pagar Agora
                         </Button>
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            )
+          })}
         </div>
 
         <Card className="mt-8 shadow-lg border-2 border-gray-200">
@@ -208,7 +242,6 @@ export default function MinhasFaturasPage() {
         </div>
       </main>
 
-      {/* Modal de Checkout */}
       {selectedFatura && (
         <MercadoPagoCheckout
           fatura={selectedFatura}
