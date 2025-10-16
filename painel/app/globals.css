@@ -87,6 +87,7 @@
   }
 }
 
+/* Apple-style typography and smooth animations */
 body {
   font-family: var(--font-sans);
   color: var(--color-foreground);
@@ -205,4 +206,3 @@ input,
 textarea {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
-/* </CHANGE> */
