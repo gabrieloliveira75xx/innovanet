@@ -9,7 +9,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  assetPrefix: '/',
+  assetPrefix: '/painel',
 }
 
 export default nextConfig
