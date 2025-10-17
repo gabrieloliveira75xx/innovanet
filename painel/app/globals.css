@@ -3,7 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Updated to Apple's SF Pro font system and refined color palette */
+/* Enhanced Apple-inspired design system with refined colors and spacing */
 :root {
   --background: #f5f5f7;
   --foreground: #1d1d1f;
@@ -87,7 +87,7 @@
   }
 }
 
-/* Apple-style typography and smooth animations */
+/* Enhanced typography with Apple's precise letter spacing and line heights */
 body {
   font-family: var(--font-sans);
   color: var(--color-foreground);
@@ -97,6 +97,7 @@ body {
   letter-spacing: -0.022em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 html {
@@ -116,7 +117,7 @@ h6 {
   color: var(--color-foreground);
 }
 
-/* Apple-style button with smooth transitions */
+/* Refined button styles with Apple's precise timing functions */
 .btn-primary {
   background-color: var(--color-primary);
   color: var(--color-primary-foreground);
@@ -126,22 +127,22 @@ h6 {
   font-size: 1.0625rem;
   line-height: 1.23536;
   letter-spacing: -0.022em;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .btn-primary:hover {
-  opacity: 0.88;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.25);
+  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 122, 255, 0.3);
 }
 
 .btn-primary:active {
   transform: translateY(0);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* Secondary button with transparent background and blue border */
 .btn-secondary {
   background-color: transparent;
   color: var(--color-primary);
@@ -150,35 +151,43 @@ h6 {
   border-radius: 0.875rem;
   font-weight: 500;
   font-size: 1.0625rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .btn-secondary:hover {
   background-color: rgba(0, 122, 255, 0.08);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 122, 255, 0.15);
 }
 
 .btn-secondary:active {
   transform: translateY(0);
   background-color: rgba(0, 122, 255, 0.12);
+  transition: all 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* Apple-style card with subtle shadow and smooth hover */
+/* Enhanced card hover effects with smoother transitions */
 .card-hover {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  will-change: transform, box-shadow;
 }
 
 .card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
 }
 
-/* Smooth fade-in animation */
+.card-hover:active {
+  transform: translateY(-2px) scale(1.01);
+  transition: all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Improved fade-in animation with Apple's timing */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(32px);
   }
   to {
     opacity: 1;
@@ -187,22 +196,53 @@ h6 {
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-/* Apple-style focus states */
+/* Enhanced focus states with larger, softer rings */
 input:focus,
 textarea:focus,
 select:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+  box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.15);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* Smooth transitions for all interactive elements */
+/* Refined transitions for all interactive elements */
 button,
 a,
 input,
 textarea {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Add smooth backdrop blur for overlays */
+.backdrop-blur-smooth {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Improved link hover states */
+a:not(.block) {
+  position: relative;
+}
+
+a:not(.block):hover {
+  color: var(--color-primary);
+}
+
+/* Add subtle scale animation for interactive cards */
+@keyframes pulse-subtle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
