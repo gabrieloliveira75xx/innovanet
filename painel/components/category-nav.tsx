@@ -69,7 +69,7 @@ export function CategoryNav({ hideMenuItems = false, showLogoutButton = false }:
             <div className="flex items-center gap-2 sm:gap-4">
               {showLogoutButton && (
                 <Link
-                  href="/"
+                  href="/painel/login"
                   className="flex items-center gap-2 text-[#6E6E73] hover:text-primary transition-all duration-300 min-h-[44px] px-3 rounded-xl hover:bg-[#F5F5F7]"
                 >
                   <LogOut size={20} />

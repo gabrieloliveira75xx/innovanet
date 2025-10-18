@@ -9,7 +9,7 @@ export default function DashboardHome() {
       <CategoryNav hideMenuItems={true} showLogoutButton={true} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
-        <div className="text-center mb-12 sm:mb-16 animate-fade-in-up">
+        <div className="text-center mb-12 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#1D1D1F] mb-3 tracking-tight">
             O que você deseja fazer?
           </h2>

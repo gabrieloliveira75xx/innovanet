@@ -2,79 +2,109 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, CreditCard, CheckCircle, XCircle, AlertCircle } from "lucide-react"
+import { ArrowLeft, CreditCard, CheckCircle, Clock, AlertCircle } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { CategoryNav } from "@/components/category-nav"
 
-const faturasIniciais = [
+interface Invoice {
+  id: number
+  month: string
+  amount: string
+  dueDate: string
+  status: "paid" | "pending" | "overdue"
+  paymentMethod?: string
+  transactionId?: string
+}
+
+const INITIAL_INVOICES: Invoice[] = [
   {
     id: 1,
-    mes: "Maio 2025",
-    valor: "R$ 99,90",
-    vencimento: "15/05/2025",
-    status: "pendente",
+    month: "Maio 2025",
+    amount: "R$ 99,90",
+    dueDate: "15/05/2025",
+    status: "pending",
   },
   {
     id: 2,
-    mes: "Abril 2025",
-    valor: "R$ 99,90",
-    vencimento: "15/04/2025",
-    status: "paga",
+    month: "Abril 2025",
+    amount: "R$ 99,90",
+    dueDate: "15/04/2025",
+    status: "paid",
+    paymentMethod: "Cartão de Crédito",
+    transactionId: "TXN-2025-04-001",
   },
   {
     id: 3,
-    mes: "Março 2025",
-    valor: "R$ 99,90",
-    vencimento: "15/03/2025",
-    status: "paga",
+    month: "Março 2025",
+    amount: "R$ 99,90",
+    dueDate: "15/03/2025",
+    status: "paid",
+    paymentMethod: "Cartão de Crédito",
+    transactionId: "TXN-2025-03-001",
   },
 ]
 
-function isOverdue(vencimento: string): boolean {
-  const [day, month, year] = vencimento.split("/").map(Number)
-  const dueDate = new Date(year, month - 1, day)
+function isOverdue(dueDate: string): boolean {
+  const [day, month, year] = dueDate.split("/").map(Number)
+  const dueDateObj = new Date(year, month - 1, day)
   const today = new Date()
   today.setHours(0, 0, 0, 0)
-  return dueDate < today
+  return dueDateObj < today
 }
 
-function getStatusInfo(fatura: (typeof faturasIniciais)[0]) {
-  if (fatura.status === "paga") {
+interface StatusInfo {
+  color: string
+  badge: {
+    bg: string
+    icon: typeof CheckCircle
+    text: string
+  }
+}
+
+function getStatusInfo(invoice: Invoice): StatusInfo {
+  if (invoice.status === "paid") {
     return {
-      color: "bg-green-50 border-green-300",
-      badge: { bg: "bg-green-600", icon: CheckCircle, text: "Paga" },
+      color: "bg-blue-50/50 border-blue-200/60",
+      badge: { bg: "bg-blue-600", icon: CheckCircle, text: "Paga" },
     }
   }
 
-  if (isOverdue(fatura.vencimento)) {
+  if (isOverdue(invoice.dueDate)) {
     return {
-      color: "bg-red-50 border-red-300",
-      badge: { bg: "bg-red-600", icon: XCircle, text: "Vencida" },
+      color: "bg-red-50 border-red-300/60",
+      badge: { bg: "bg-slate-600", icon: AlertCircle, text: "Vencida" },
     }
   }
 
   return {
-    color: "bg-orange-50 border-orange-300",
-    badge: { bg: "bg-orange-600", icon: AlertCircle, text: "Pendente" },
+    color: "bg-amber-50/50 border-amber-200/60",
+    badge: { bg: "bg-amber-600", icon: Clock, text: "Pendente" },
   }
 }
 
 export default function MinhasFaturasPage() {
-  const [faturas] = useState(faturasIniciais)
+  const [invoices] = useState<Invoice[]>(INITIAL_INVOICES)
+  const [statusFilter, setStatusFilter] = useState<"all" | "paid" | "pending" | "overdue">("all")
 
-  const handleCardClick = (fatura: (typeof faturasIniciais)[0]) => {
-    if (fatura.status !== "paga") {
-      console.log("Abrir pagamento para:", fatura.mes)
+  const handleCardClick = (invoice: Invoice) => {
+    if (invoice.status !== "paid") {
+      console.log("Abrir pagamento para:", invoice.month)
     }
   }
 
+  const filteredInvoices = invoices.filter((invoice) => {
+    if (statusFilter === "all") return true
+    if (statusFilter === "overdue") return isOverdue(invoice.dueDate)
+    return invoice.status === statusFilter
+  })
+
   return (
-    <div className="min-h-screen bg-[#F5F5F7]">
+    <div className="min-h-screen bg-background">
       <CategoryNav />
 
-      <header className="bg-white border-b shadow-sm py-4 px-3">
+      <header className="bg-card border-b border-border py-4 px-3">
         <div className="max-w-4xl mx-auto">
           <Link
             href="/painel"
@@ -89,53 +119,76 @@ export default function MinhasFaturasPage() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-12">
-        <div className="space-y-6">
-          {faturas.map((fatura) => {
-            const statusInfo = getStatusInfo(fatura)
-            const StatusIcon = statusInfo.badge.icon
+        {filteredInvoices.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-xl text-muted-foreground tracking-tight">Nenhuma fatura encontrada com este status.</p>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {filteredInvoices.map((invoice) => {
+              const statusInfo = getStatusInfo(invoice)
+              const StatusIcon = statusInfo.badge.icon
 
-            return (
-              <Card
-                key={fatura.id}
-                className={`border transition-all hover:shadow-xl cursor-pointer shadow-lg bg-white ${statusInfo.color}`}
-                onClick={() => handleCardClick(fatura)}
-              >
-                <CardContent className="p-8">
-                  <div className="flex flex-col gap-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="text-2xl font-bold mb-2 text-[#1D1D1F]">{fatura.mes}</h3>
-                        <p className="text-lg text-[#6E6E73]">Vencimento: {fatura.vencimento}</p>
+              return (
+                <Card
+                  key={invoice.id}
+                  className={`
+                    border transition-all hover:shadow-xl cursor-pointer 
+                    shadow-lg bg-card rounded-2xl overflow-hidden
+                  `}
+                  onClick={() => handleCardClick(invoice)}
+                >
+                  <CardContent className="p-8">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex-1">
+                        <h3 className="text-2xl font-semibold mb-1 text-foreground tracking-tight">{invoice.month}</h3>
+                        <p className="text-[15px] text-muted-foreground tracking-tight">
+                          Vencimento: {invoice.dueDate}
+                        </p>
                       </div>
-                      <Badge className={`${statusInfo.badge.bg} text-white text-lg px-6 py-3 gap-2`}>
-                        <StatusIcon className="w-6 h-6" />
+
+                      <Badge
+                        className={`
+                          ${statusInfo.badge.bg} text-white text-[13px] px-3 py-1.5 gap-1.5
+                          rounded-full font-medium shadow-sm tracking-tight
+                        `}
+                      >
+                        <StatusIcon className="w-3.5 h-3.5" strokeWidth={2.5} />
                         {statusInfo.badge.text}
                       </Badge>
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <p className="text-4xl font-bold text-primary">{fatura.valor}</p>
+                      <div>
+                        <p className="text-4xl font-semibold text-primary tracking-tight">{invoice.amount}</p>
+                      </div>
 
-                      {fatura.status === "pendente" && (
-                        <Button
-                          size="lg"
-                          className="gap-2 h-14 px-8 text-lg font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105"
+                      {invoice.status === "pending" && (
+                        <button
+                          className="
+                            bg-primary hover:bg-primary/90 text-primary-foreground
+                            px-6 py-3 rounded-full font-medium text-[15px] tracking-tight
+                            shadow-sm hover:shadow-md
+                            transition-all duration-200 ease-out
+                            flex items-center gap-2
+                            min-h-[44px]
+                          "
                           onClick={(e) => {
                             e.stopPropagation()
-                            console.log("Pagar fatura:", fatura.id)
+                            console.log("Pagar fatura:", invoice.id)
                           }}
                         >
-                          <CreditCard className="w-5 h-5" />
+                          <CreditCard className="w-[18px] h-[18px]" strokeWidth={2} />
                           Pagar Agora
-                        </Button>
+                        </button>
                       )}
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )
-          })}
-        </div>
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
+        )}
 
         <div className="grid grid-cols-1 gap-4 mt-12">
           <Button
