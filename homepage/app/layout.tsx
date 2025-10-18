@@ -5,9 +5,22 @@ import { Suspense } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "Innovanet - Internet de Alta Velocidade",
-  description: "Internet fibra óptica com instalação gratuita e suporte 24/7",
-  generator: "v0.app",
+  title: "Innovanet - Conectando inovação e simplicidade",
+  description: "Innovanet oferece internet robusta, simples e acessível, revolucionando o mercado com soluções modernas e custo-benefício excepcional.",
+  icons: {
+    icon: "icon.png",
+  },
+  keywords: [
+    "Innovanet",
+    "Internet fibra óptica",
+    "Alta velocidade",
+    "Inovação",
+    "Custo-benefício",
+    "Conexão confiável",
+    "Tecnologia moderna",
+  ],
+  authors: [{ name: "Innovanet", url: "https://www.innovanet.com.br" }],
+  colorScheme: "light",
 }
 
 export default function RootLayout({
@@ -24,6 +37,7 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        <link rel="icon" href="icon.png" />
       </head>
       <body className="font-sans antialiased">
         <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>

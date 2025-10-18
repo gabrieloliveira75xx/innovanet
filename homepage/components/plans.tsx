@@ -48,85 +48,56 @@ const plans = [
 
 export default function Plans() {
   return (
-    <section id="planos" className="py-20 bg-gradient-to-b from-white to-gray-50">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">Nossos Planos</h2>
-          <p className="text-xl text-gray-600">Escolha o plano ideal para você</p>
+    <section id="planos" className="py-24 bg-gradient-to-b from-white via-gray-50 to-white relative overflow-hidden">
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-20 left-10 w-96 h-96 bg-primary rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent rounded-full blur-3xl" />
+      </div>
+
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center mb-20">
+          <h2 className="text-5xl md:text-6xl font-bold text-primary mb-4 text-balance">Nossos Planos</h2>
+          <p className="text-xl md:text-2xl text-gray-600 font-light">Escolha o plano ideal para você</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {plans.map((plan) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {plans.map((plan, index) => (
             <div
               key={plan.name}
-              className={`relative bg-white rounded-3xl shadow-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${
-                plan.popular ? "ring-4 ring-accent scale-105" : ""
+              className={`relative bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 ${
+                plan.popular ? "ring-2 ring-accent md:scale-105" : ""
               }`}
             >
               {plan.popular && (
-                <div className="absolute top-1 right-4 bg-accent text-white px-4 py-1.5 text-sm font-bold rounded-full shadow-lg z-10">
-                  Mais Popular
+                <div className="absolute top-0 right-0 z-20">
+                  <div className="bg-accent text-white px-4 py-1.5 text-sm font-bold rounded-bl-xl">Mais Popular</div>
                 </div>
               )}
 
-              {/* Speed Badge */}
-              <div className="bg-gradient-to-r from-primary to-blue-700 text-white py-6 px-6 text-center">
-                <h5 className="text-4xl font-bold">
-                  {plan.speed} <span className="text-2xl font-normal">{plan.unit}</span>
-                </h5>
-              </div>
-
-              {/* Animated Scene */}
-              <div className="relative h-32 bg-gradient-to-b from-blue-900 via-blue-800 to-blue-700 overflow-hidden">
-                {/* Stars */}
-                {[...Array(10)].map((_, i) => (
-                  <span
-                    key={i}
-                    className="absolute w-1 h-1 bg-white rounded-full animate-twinkle"
-                    style={{
-                      left: `${Math.random() * 100}%`,
-                      top: `${Math.random() * 100}%`,
-                      animationDelay: `${Math.random() * 3}s`,
-                      animationDuration: `${2 + Math.random() * 2}s`,
-                    }}
-                  />
-                ))}
-
-                {/* Rocket */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 animate-float">
-                  <svg
-                    width="40"
-                    height="40"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="drop-shadow-lg"
-                  >
-                    <path d="M12 2L4 12h5v8l3-4 3 4v-8h5L12 2z" fill="#FF9100" stroke="#fff" strokeWidth="1" />
-                    <circle cx="12" cy="10" r="2" fill="#fff" />
-                  </svg>
+              <div className="bg-primary text-white py-10 px-6 text-center">
+                <h3 className="text-xl font-semibold mb-3 opacity-90">{plan.name}</h3>
+                <div className="flex items-baseline justify-center gap-2 mb-2">
+                  <span className="text-7xl font-bold">{plan.speed}</span>
+                  <span className="text-2xl font-semibold">{plan.unit}</span>
                 </div>
               </div>
 
-              {/* Price Section */}
-              <div className="text-center py-6 px-6 bg-gray-50">
+              <div className="text-center py-6 px-6 border-b border-gray-100">
                 <div className="flex items-baseline justify-center gap-1">
-                  <span className="text-xl text-gray-600 font-medium">R$</span>
+                  <span className="text-lg text-gray-600">R$</span>
                   <span className="text-5xl font-bold text-gray-900">{plan.price}</span>
-                  <span className="text-lg text-gray-600 font-medium">/mês</span>
+                  <span className="text-lg text-gray-600">/mês</span>
                 </div>
-                <p className="text-sm text-gray-600 mt-2 font-medium">Internet Fibra Óptica</p>
               </div>
 
-              {/* Features List */}
-              <div className="px-6 py-6">
-                <ul className="space-y-2.5">
+              <div className="px-6 py-8">
+                <ul className="space-y-3">
                   {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-start gap-2 text-sm text-gray-700">
+                    <li key={index} className="flex items-start gap-3 text-gray-700">
                       <svg className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                         <path
                           fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                           clipRule="evenodd"
                         />
                       </svg>
@@ -136,19 +107,26 @@ export default function Plans() {
                 </ul>
               </div>
 
-              {/* CTA Button */}
               <div className="px-6 pb-6">
                 <a
                   href="https://wa.me/551234567890"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block w-full text-center py-4 bg-accent text-white font-bold text-lg rounded-xl transition-all duration-300 hover:bg-orange-600 hover:shadow-lg hover:-translate-y-0.5"
+                  className={`block w-full text-center py-3.5 rounded-xl font-semibold text-base transition-all duration-300 ${
+                    plan.popular
+                      ? "bg-accent text-white hover:bg-accent/90 shadow-md hover:shadow-lg"
+                      : "bg-primary text-white hover:bg-primary/90 shadow-md hover:shadow-lg"
+                  }`}
                 >
-                  EU QUERO
+                  Assinar Agora
                 </a>
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="text-center mt-12">
+          <p className="text-gray-600 text-lg">Todos os planos incluem instalação gratuita e suporte técnico 24/7</p>
         </div>
       </div>
     </section>

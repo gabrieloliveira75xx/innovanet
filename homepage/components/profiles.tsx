@@ -1,4 +1,3 @@
-
 const profiles = [
   {
     title: "Home Office",
@@ -51,17 +50,16 @@ export default function Profiles() {
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent group-hover:from-black/80 group-hover:via-black/40 transition-all duration-300" />
-                  <div className="content absolute bottom-0 left-0 right-0 p-8 text-white text-center translate-y-8 group-hover:translate-y-0 transition-all duration-300">
-                    <h4 className="title text-6xl font-bold mb-1">{profile.title}</h4>
-                    <h5 className="subtitle text-xl mb-5 opacity-90">{profile.subtitle}</h5>
+                  <div className="content absolute bottom-0 left-0 right-0 p-8 text-white flex flex-col items-center justify-end translate-y-8 group-hover:translate-y-0 transition-all duration-300">
+                    <h4 className="title text-5xl md:text-6xl font-bold mb-2 text-center w-full">{profile.title}</h4>
+                    <h5 className="subtitle text-lg md:text-xl mb-5 opacity-90 text-center w-full">
+                      {profile.subtitle}
+                    </h5>
                     <div className="btn opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <span className="relative inline-block bg-accent hover:bg-accent/90 px-8 py-3 rounded-lg font-semibold transition-all duration-300 group-hover:scale-105">
                         <span className="relative z-10">Veja os planos</span>
                       </span>
                     </div>
-                  </div>
-                  <div className="icon absolute bottom-0 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-
                   </div>
                 </figure>
               </a>
