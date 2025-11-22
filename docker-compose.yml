@@ -1,6 +1,7 @@
 services:
   homepage:
     build: ./homepage
+    image: innovanet-homepage:latest
     container_name: maximiza-homepage
     environment:
       - NODE_ENV=production
@@ -17,6 +18,7 @@ services:
 
   painel:
     build: ./painel
+    image: innovanet-painel:latest
     container_name: maximiza-painel
     environment:
       - NODE_ENV=production
